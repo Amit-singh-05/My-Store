@@ -45,7 +45,7 @@ public class AdminServiceImpl implements AdminService{
 			throw new LoginException("To update admin details please login first ");
 		}
 
-		if (admin.getAdminId() == loggedInUser.getUserId()) {
+		if (admin.getAdminId() == loggedInUser.getUserId()&&loggedInUser.getAdmin()) {
 			return adminrepo.save(admin);
 		} else {
 			throw new AdminException("Provided admin details are incorrect please check admin ID and other details and try again ");
@@ -113,10 +113,10 @@ public class AdminServiceImpl implements AdminService{
 			throw new LoginException("No admin found with this username => " + admin.getAdminUsername());	
 		}
 		
-		Optional<CurrentUserSession> validCustomerSessionOpt = currentUserSessionRepo.findById(existingUser.getAdminId());
+		Optional<CurrentUserSession> validAdminSessionOpt = currentUserSessionRepo.findById(existingUser.getAdminId());
 
-		if (validCustomerSessionOpt.isPresent() && existingUser.getAdminPassword().equals(admin.getAdminPassword())) {
-			currentUserSessionRepo.delete(validCustomerSessionOpt.get());
+		if (validAdminSessionOpt.isPresent() && existingUser.getAdminPassword().equals(admin.getAdminPassword())) {
+			currentUserSessionRepo.delete(validAdminSessionOpt.get());
 		}
 
 		if (existingUser.getAdminPassword().equals(admin.getAdminPassword())) {
