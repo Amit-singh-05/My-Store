@@ -1,0 +1,105 @@
+package com.store.controller;
+
+import java.util.List;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.store.dto.AdminDto;
+import com.store.dto.CurrentUserSession;
+import com.store.dto.CustomerDto;
+import com.store.exception.AdminException;
+import com.store.exception.CustomerException;
+import com.store.exception.LoginException;
+import com.store.module.Admin;
+import com.store.module.Customer;
+import com.store.services.CustomerService;
+
+@RestController
+@RequestMapping("/customerController")
+public class CustomerController {
+	@Autowired
+	private CustomerService customerService;
+	
+	@PostMapping("/customerSignUp")
+	public ResponseEntity<Customer> signUpCustomerHandler(@Valid @RequestBody Customer customer) throws CustomerException{
+		
+		Customer savedUser = customerService.signUpCustomer(customer);
+
+		return new ResponseEntity<Customer>(savedUser, HttpStatus.OK);
+	}
+	
+	@PutMapping("/updateCustomer")
+	public ResponseEntity<Customer> updateCustomerDetailsHandler(@Valid @RequestBody Customer customer, @RequestParam("key") String key) throws CustomerException, LoginException {
+
+		Customer updatedCustomer = customerService.updateCustomerDetails(customer, key);
+		
+		return new ResponseEntity<Customer>(updatedCustomer, HttpStatus.OK);
+
+	}
+	
+	@DeleteMapping("/deleteCustomer")
+	public ResponseEntity<Customer> deleteCustomerHandler(@RequestParam("key") String key)throws CustomerException, LoginException {
+
+		Customer deletedCustomer = customerService.deleteCustomerAccount(key);
+
+		return new ResponseEntity<Customer>(deletedCustomer, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/customerByUserName")
+	public ResponseEntity<Customer> getCustomerByUserNameHandler(@RequestParam("customerUserName") String customerUserName) throws CustomerException, LoginException {
+
+		Customer customer = customerService.findCustomerByCustomerUserName(customerUserName);
+
+		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/customerByCustomerId")
+	public ResponseEntity<Customer> getCustomerByCustomerIdHandler(@RequestParam("customerId") Integer customerId) throws CustomerException, LoginException {
+
+		Customer customer = customerService.findCustomerByCustomerId(customerId);
+
+		return new ResponseEntity<Customer>(customer, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/customers")
+	public ResponseEntity<List<Customer>> findAllCustomersHandler() throws CustomerException{
+
+		List<Customer> allCustomer = customerService.findAllCustomers();
+
+		return new ResponseEntity<List<Customer>>(allCustomer, HttpStatus.OK);
+
+	}
+	
+	@PostMapping("/loginCustomer")
+	public ResponseEntity<CurrentUserSession> loginCustomerHandler(@Valid @RequestBody CustomerDto customer) throws LoginException {
+
+		CurrentUserSession cus = customerService.loginCustomer(customer);
+
+		return new ResponseEntity<CurrentUserSession>(cus, HttpStatus.OK);
+
+	}
+	
+	@PostMapping("/logoutCustomer")
+	public ResponseEntity<String> logoutCustomerHandler(@RequestParam("key") String key) throws LoginException {
+
+		String res = customerService.logoutCustomer(key);
+
+		return new ResponseEntity<String>(res, HttpStatus.OK);
+
+	}
+}

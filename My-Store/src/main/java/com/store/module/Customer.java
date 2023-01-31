@@ -31,25 +31,24 @@ public class Customer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer customerId;
 	
-	@Size(min = 2, max = 20, message = "Invalid customer name ")
+	@Size(min = 2, max = 20, message = "Length of name should not be more than 20 characters and less than 2 characters")
 	private String customerName;
 	
-	@Pattern(regexp = "^[0-9]{10}", message = "Incorrect mobile number entered ")
+	@Pattern(regexp = "^[0-9]{10}", message = "Check the mobile number entered and Try again ")
 	@Column(unique = true)
 	private String customerMobileNumber;
 	
-	@Email
+	@Email(message = "Check the e-mail ID entered and try again ")
 	@Column(unique = true)
 	private String customerUsername;
 	
-	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",message = "{user.invalid.password}")
+	@Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$",message = "Password should contain at least 1 uppercase character, 1 lower case character, 1 special character, numeric value and length of the password should be more than 8 characters ")
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String customerPassword;
 	
 	@OneToMany(cascade = CascadeType.ALL)
 	private List<Address> addresses;
 	
-//	@OneToOne(cascade = CascadeType.ALL)
-//	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-//	private Cart cart;
+	@OneToOne(cascade = CascadeType.ALL)
+	private Cart cart;
 }
