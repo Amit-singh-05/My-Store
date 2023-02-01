@@ -81,7 +81,7 @@ public class CustomerServiceImpl implements CustomerService{
 			customerrepo.delete(ccustomer);
 			return ccustomer;
 		}else {
-			throw new CustomerException("Login with customer account to add address ");
+			throw new CustomerException("Login with customer account to delete customer account ");
 		}
 
 	}

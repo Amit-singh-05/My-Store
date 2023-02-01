@@ -58,18 +58,14 @@ public class AdminServiceImpl implements AdminService{
 
 		if (loggedInUser == null) {
 			throw new LoginException("To delete admin account login first ");
-		}
-		Optional<Admin> dto = adminrepo.findById(loggedInUser.getUserId());
-		
-		if (dto.isEmpty()) {
+		}else if(loggedInUser.getAdmin()) {
+			Optional<Admin> opt = adminrepo.findById(loggedInUser.getUserId());
+			Admin existingAdmin = opt.get();
+			adminrepo.delete(existingAdmin);
+			return existingAdmin;
+		}else {
 			throw new AdminException("Please login first as admin to delete admin account ");
 		}
-		
-		Admin existingAdmin = dto.get();
-			
-		adminrepo.delete(existingAdmin);
-
-		return existingAdmin;
 	}
 
 	@Override
