@@ -1,5 +1,6 @@
 package com.store.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class CategoryServicesImpl implements CategoryServices{
 			throw new CategoryException("No category found with this category id  => "+category.getCategoryId());
 		}else {
 			Category opt = cat.get();
-			Category fn = categoryRepo.findByCategoryName(category.getCategoryName();
+			Category fn = categoryRepo.findByCategoryName(category.getCategoryName());
 			if(fn!=null) {
 				throw new CategoryException("Category with this category name already exist => "+category.getCategoryName());
 			}else {
@@ -91,6 +92,16 @@ public class CategoryServicesImpl implements CategoryServices{
 			throw new CategoryException("No category found with this category name => "+categoryName);
 		}else {
 			return cat;
+		}
+	}
+
+	@Override
+	public List<Category> getAllCategorys() throws CategoryException {
+		List<Category> Categorys = categoryRepo.findAll();
+		if(Categorys.isEmpty()) {
+			throw new CategoryException("No category found ");
+		}else {
+			return Categorys;
 		}
 	}
 

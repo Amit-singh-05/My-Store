@@ -1,11 +1,16 @@
 package com.store.module;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +26,9 @@ public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer productId;
+	
 	@Size(min = 2, max = 30, message = "Length of name of product should not be more than 30 characters and less than 2 characters")
+	@Column(unique = true)
 	private String productName;
 	
 	@Min(value = 1,message = "Price of product can't be less than ₹1 ")
@@ -41,4 +48,8 @@ public class Product {
 	
 	@Min(value = 1,message = "Quantity of product can't be less than 1 ")
 	private int quantity;
+	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private Category category;
 }
