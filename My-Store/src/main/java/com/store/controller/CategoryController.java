@@ -1,5 +1,7 @@
 package com.store.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,12 +55,21 @@ public class CategoryController {
 		return new ResponseEntity<Category>(deletedCategory, HttpStatus.OK);
 	}
 	
-	@GetMapping("/categoryByCategoryName ")
+	@GetMapping("/categoryByCategoryName")
 	public ResponseEntity<Category> findCategoryByCategoryNameHandler(@RequestParam("categoryName") String categoryName) throws CategoryException{
 
 		Category category = categoryServices.getCategoryByCategoryName(categoryName);
 
 		return new ResponseEntity<Category>(category, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/categorys")
+	public ResponseEntity<List<Category>> findAllCategorysHandler() throws CategoryException{
+
+		List<Category> categorys = categoryServices.getAllCategorys();
+
+		return new ResponseEntity<List<Category>>(categorys, HttpStatus.OK);
 
 	}
 }
