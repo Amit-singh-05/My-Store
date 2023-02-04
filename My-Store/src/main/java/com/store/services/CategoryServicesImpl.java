@@ -75,7 +75,17 @@ public class CategoryServicesImpl implements CategoryServices{
 
 	@Override
 	public Category deleteCategory(String categoryName, String key)throws CategoryException, AdminException, LoginException {
-		 Category cat = categoryRepo.findByCategoryName(categoryName);
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+		
+		if (loggedInUser.getAdmin() == false) {
+			throw new AdminException("Only admin can delete category ");
+		}
+		
+		Category cat = categoryRepo.findByCategoryName(categoryName);
 			if(cat==null) {
 				throw new CategoryException("No category found with this category name => "+categoryName);
 			}else {

@@ -13,7 +13,7 @@ public interface ProductServices {
 
 	public Product updateProduct(Product product, String key) throws ProductException,AdminException, LoginException;
 
-	public Product deleteProduct(String productName,String key) throws ProductException,AdminException, LoginException;
+	public Product deleteProduct(Integer productId,String key) throws ProductException,AdminException, LoginException;
 	
 	public Product getProductByProductName(String productName) throws ProductException;
 	
