@@ -67,6 +67,9 @@ public class CategoryServicesImpl implements CategoryServices{
 				throw new CategoryException("Category with this category name already exist => "+category.getCategoryName());
 			}else {
 				opt.setCategoryName(category.getCategoryName());
+				if(!category.getProductList().isEmpty()) {
+					opt.getProductList().addAll(category.getProductList());
+				}
 				return categoryRepo.save(opt);
 			}
 			
