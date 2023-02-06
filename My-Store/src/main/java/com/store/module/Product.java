@@ -10,6 +10,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -50,6 +51,6 @@ public class Product {
 	private int quantity;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonIgnore
 	private Category category;
 }
