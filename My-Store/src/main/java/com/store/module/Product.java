@@ -15,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -48,7 +49,7 @@ public class Product {
 	private String manufacturer;
 	
 	@Min(value = 1,message = "Quantity of product can't be less than 1 ")
-	private int quantity;
+	private Integer quantity;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JsonIgnore
