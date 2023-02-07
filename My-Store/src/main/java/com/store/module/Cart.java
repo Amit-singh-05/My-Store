@@ -1,10 +1,13 @@
 package com.store.module;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -26,4 +29,8 @@ public class Cart {
 //	@OneToOne
 //	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 //	private Customer customer;
+	
+	@ElementCollection
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private Map<Product,Integer> productes = new HashMap<>();
 }
