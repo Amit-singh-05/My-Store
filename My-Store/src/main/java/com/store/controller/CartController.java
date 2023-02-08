@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,5 +35,13 @@ public class CartController {
 
 		return new ResponseEntity<Cart>(cart, HttpStatus.OK);
 
+	}
+	
+	@DeleteMapping("/deleteProductFromCart")
+	public ResponseEntity<Cart> deleteProductFromCartHandler(@RequestParam("categoryName") String categoryName, @RequestParam String key) throws ProductException, CustomerException, LoginException{
+
+		Cart deletedProduct = cartServices.deleteProductFromCart(categoryName, key);
+
+		return new ResponseEntity<Cart>(deletedProduct, HttpStatus.OK);
 	}
 }

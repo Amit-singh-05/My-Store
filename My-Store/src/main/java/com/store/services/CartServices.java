@@ -8,4 +8,7 @@ import com.store.module.Product;
 
 public interface CartServices {
 	public Cart addProductToCart(String productName, Integer quantity ,String key) throws ProductException,CustomerException, LoginException;
+	public Cart deleteProductFromCart(String productName,String key) throws ProductException,CustomerException, LoginException;
+	
+	
 }
