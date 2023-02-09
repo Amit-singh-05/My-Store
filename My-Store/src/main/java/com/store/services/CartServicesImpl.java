@@ -110,4 +110,44 @@ public class CartServicesImpl implements CartServices{
             return cart;
 	}
 
+	@Override
+	public Cart updateProductQuantity(String productName, Integer quantity, String key)
+			throws ProductException, CustomerException, LoginException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (loggedInUser.getAdmin()) {
+			throw new CustomerException("Only customer can update product quantity to their cart please log in as customer ");
+		}
+		
+		if (quantity==0) {
+			throw new ProductException("Quantity of products to be updated should be more than 0 ");
+		}
+		
+		Product product = productRepo.findByProductName(productName);
+		if(product==null) {
+			throw new ProductException("No product found with this product name ");
+		}else if(product!=null && product.getQuantity()<quantity) {
+			throw new ProductException("Product available but the quantity is less ");
+		}
+		Optional<Customer> copt = customerrepo.findById(loggedInUser.getUserId());
+		if(copt.isEmpty()) {
+			throw new CustomerException("No customer data found with this ID ");
+		}
+			Customer customer = copt.get();
+			Cart cart = customer.getCart();
+			Map<Product,Integer> productes = cart.getProductes();
+			
+			if(productes.get(product)==null) {
+				throw new ProductException("No product found with this product name in cart ");
+			}else {
+				productes.put(product, quantity);
+			}
+			cartRepo.save(cart);
+            return cart;
+	}
+
 }
