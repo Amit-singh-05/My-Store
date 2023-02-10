@@ -19,9 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.store.dto.AdminDto;
 import com.store.dto.CurrentUserSession;
 import com.store.dto.CustomerDto;
+import com.store.exception.AddressException;
 import com.store.exception.AdminException;
 import com.store.exception.CustomerException;
 import com.store.exception.LoginException;
+import com.store.module.Address;
 import com.store.module.Admin;
 import com.store.module.Customer;
 import com.store.services.CustomerService;
@@ -46,6 +48,24 @@ public class CustomerController {
 		Customer updatedCustomer = customerService.updateCustomerDetails(customer, key);
 		
 		return new ResponseEntity<Customer>(updatedCustomer, HttpStatus.OK);
+
+	}
+	
+	@PutMapping("/addAddress")
+	public ResponseEntity<Customer> addAddressHandler(@Valid @RequestBody Address address, @RequestParam("key") String key) throws CustomerException, LoginException{
+
+		Customer updatedCustomer = customerService.addAddress(address, key);
+		
+		return new ResponseEntity<Customer>(updatedCustomer, HttpStatus.OK);
+
+	}
+	
+	@DeleteMapping("/deleteAddress")
+	public ResponseEntity<Customer> deleteAddressHandler(@RequestParam("addressId") Integer addressId,@RequestParam("key") String key) throws CustomerException, LoginException, AddressException{
+
+		Customer deletedAddress = customerService.deleteAddress(addressId, key);
+
+		return new ResponseEntity<Customer>(deletedAddress, HttpStatus.OK);
 
 	}
 	

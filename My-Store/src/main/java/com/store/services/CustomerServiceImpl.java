@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 
 import com.store.dto.CurrentUserSession;
 import com.store.dto.CustomerDto;
+import com.store.exception.AddressException;
 import com.store.exception.CustomerException;
 import com.store.exception.LoginException;
 import com.store.module.Address;
 import com.store.module.Customer;
+import com.store.repository.AddressRepo;
 import com.store.repository.CurrentUserSessionRepo;
 import com.store.repository.CustomerRepo;
 
@@ -22,6 +24,9 @@ import net.bytebuddy.utility.RandomString;
 public class CustomerServiceImpl implements CustomerService{
 	@Autowired
 	private CustomerRepo customerrepo;
+	
+	@Autowired
+	private AddressRepo addressRepo;
 
 	@Autowired
 	private CurrentUserSessionRepo currentUserSessionRepo;
@@ -159,6 +164,29 @@ public class CustomerServiceImpl implements CustomerService{
 		}
 		currentUserSessionRepo.delete(loggedInUser);
 		return "Logged Out !";
+	}
+
+	@Override
+	public Customer deleteAddress(Integer addressId, String key) throws CustomerException, LoginException,AddressException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("To update customer details please login first ");
+		}else if(!loggedInUser.getAdmin()) {
+			Optional<Address> aopt = addressRepo.findById(addressId);
+			Optional<Customer> opt = customerrepo.findById(loggedInUser.getUserId());
+			Customer ccustomer = opt.get();
+			if(aopt.isEmpty()) {
+				throw new AddressException("No address found with this address ID ");
+			}else {
+				Address adr = aopt.get();
+				ccustomer.getAddresses().remove(adr);
+				addressRepo.delete(adr);
+				return ccustomer;
+			}
+		}else {
+			throw new CustomerException("Login with customer account to add address ");
+		}
 	}
 
 }
