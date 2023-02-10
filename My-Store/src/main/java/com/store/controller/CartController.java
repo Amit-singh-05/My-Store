@@ -1,26 +1,25 @@
 package com.store.controller;
 
-import javax.validation.Valid;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.store.exception.AdminException;
 import com.store.exception.CategoryException;
 import com.store.exception.CustomerException;
 import com.store.exception.LoginException;
 import com.store.exception.ProductException;
 import com.store.module.Cart;
 import com.store.module.Category;
+import com.store.module.Product;
 import com.store.services.CartServices;
-import com.store.services.CategoryServices;
 
 @RestController
 @RequestMapping("/cartController")
@@ -52,5 +51,14 @@ public class CartController {
 		Cart deletedProduct = cartServices.deleteProductFromCart(productName, key);
 
 		return new ResponseEntity<Cart>(deletedProduct, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getAllProductsInCart")
+	public ResponseEntity<Map<Product, Integer>> getAllProductsInCartHandler(@RequestParam String key) throws ProductException, CustomerException, LoginException{
+
+		Map<Product, Integer> products = cartServices.getAllProductsInCart(key);
+
+		return new ResponseEntity<Map<Product, Integer>>(products, HttpStatus.OK);
+
 	}
 }
