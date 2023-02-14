@@ -62,12 +62,12 @@ public class CartServicesImpl implements CartServices{
 		}
 			Customer customer = copt.get();
 			Cart cart = customer.getCart();
-			Map<Product,Integer> productes = cart.getProductes();
+			Map<Product,Integer> products = cart.getProducts();
 			
-			if(productes.get(product)==null) {
-				productes.put(product, quantity);
-			}else if(productes.get(product)+quantity<=product.getQuantity()) {
-				productes.put(product, productes.get(product)+quantity);
+			if(products.get(product)==null) {
+				products.put(product, quantity);
+			}else if(products.get(product)+quantity<=product.getQuantity()) {
+				products.put(product, products.get(product)+quantity);
 			}else {
 				throw new ProductException("Product available but the quantity is less ");
 			}
@@ -99,12 +99,12 @@ public class CartServicesImpl implements CartServices{
 		}
 			Customer customer = copt.get();
 			Cart cart = customer.getCart();
-			Map<Product,Integer> productes = cart.getProductes();
+			Map<Product,Integer> products = cart.getProducts();
 			
-			if(productes.get(product)==null) {
+			if(products.get(product)==null) {
 				throw new ProductException("No product found with this product name in cart");
 			}else {
-				productes.remove(product);
+				products.remove(product);
 			}
 			cartRepo.save(cart);
             return cart;
@@ -139,12 +139,12 @@ public class CartServicesImpl implements CartServices{
 		}
 			Customer customer = copt.get();
 			Cart cart = customer.getCart();
-			Map<Product,Integer> productes = cart.getProductes();
+			Map<Product,Integer> products = cart.getProducts();
 			
-			if(productes.get(product)==null) {
+			if(products.get(product)==null) {
 				throw new ProductException("No product found with this product name in cart ");
 			}else {
-				productes.put(product, quantity);
+				products.put(product, quantity);
 			}
 			cartRepo.save(cart);
             return cart;
@@ -169,12 +169,12 @@ public class CartServicesImpl implements CartServices{
 		}
 			Customer customer = copt.get();
 			Cart cart = customer.getCart();
-			Map<Product,Integer> productes = cart.getProductes();
+			Map<Product,Integer> products = cart.getProducts();
 			
-			if(productes.isEmpty()) {
+			if(products.isEmpty()) {
 				throw new ProductException("No product found ");
 			}else {
-				return productes;	
+				return products;	
 			}
 	}
 
