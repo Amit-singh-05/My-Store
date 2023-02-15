@@ -51,4 +51,8 @@ public class Customer {
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart;
+	
+	@OneToMany(cascade = CascadeType.ALL)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private List<Orders> orders;
 }
