@@ -1,0 +1,100 @@
+package com.store.services;
+
+import java.util.Map;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.store.dto.CurrentUserSession;
+import com.store.exception.AddressException;
+import com.store.exception.CustomerException;
+import com.store.exception.LoginException;
+import com.store.exception.OrdersException;
+import com.store.exception.ProductException;
+import com.store.module.Address;
+import com.store.module.Cart;
+import com.store.module.Customer;
+import com.store.module.Orders;
+import com.store.module.Product;
+import com.store.repository.AddressRepo;
+import com.store.repository.CartRepo;
+import com.store.repository.CurrentUserSessionRepo;
+import com.store.repository.CustomerRepo;
+import com.store.repository.OrdersRepo;
+import com.store.repository.ProductRepo;
+
+@Service
+public class OrdersServicesImpl implements OrdersServices{
+	@Autowired
+	private CartRepo cartRepo;
+	
+	@Autowired
+	private CustomerRepo customerrepo;
+	
+	@Autowired
+	private AddressRepo addressRepo;
+	
+	@Autowired
+	private CurrentUserSessionRepo currentUserSessionRepo;
+	
+	@Autowired
+	private ProductRepo productRepo;
+	
+	@Autowired
+	private OrdersRepo ordersRepo;
+	
+	@Override
+	public Orders PlaceOrder(Orders orders,Integer addressId,String key) throws ProductException, AddressException,CustomerException,OrdersException,LoginException {
+		Optional<Orders> opt = ordersRepo.findById(orders.getOrderId());
+		if(opt.isPresent()) {
+			throw new OrdersException("Order with this order ID already placed => "+orders.getOrderId());
+		}
+		Optional<Address> aopt = addressRepo.findById(addressId);
+		if(aopt.isEmpty()) {
+			throw new AddressException("No address found with this address ID => "+addressId);
+		}
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (loggedInUser.getAdmin()) {
+			throw new CustomerException("Only customer can access cart details please log in as customer ");
+		}
+		
+		Optional<Customer> copt = customerrepo.findById(loggedInUser.getUserId());
+		if(copt.isEmpty()) {
+			throw new CustomerException("No customer data found with this ID ");
+		}
+			Customer customer = copt.get();
+			Cart cart = customer.getCart();
+			Map<Product,Integer> products = cart.getProducts();
+			Address adr = new Address();
+			if(customer.getAddresses().contains(aopt.get())) {
+				adr = aopt.get();
+			}else {
+				throw new AddressException("You don't have any address with this address ID  => "+addressId);
+			}
+			
+			if(products.isEmpty()) {
+				throw new ProductException("No product found ");
+			}else {
+				orders.setProducts(products);
+				orders.setDeliveryDate(orders.getOrderDate().plusDays(7));
+				orders.setCustomer(customer);
+				orders.setDeliveryAddress(adr);
+				customer.getOrders().add(orders);
+				customerrepo.save(customer);
+				for(Product i:orders.getProducts().keySet()) {
+					i.setQuantity(i.getQuantity()-orders.getProducts().get(i));
+					productRepo.save(i);
+				}
+				cart.setProducts(null);
+				cartRepo.save(cart);
+				return orders;	
+			}
+	}
+
+}

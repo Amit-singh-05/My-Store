@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -38,7 +39,8 @@ public class Address {
 	private String pincode;
 	
 	@ManyToOne
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonIgnore
 	private Customer customer;
 	
 	
