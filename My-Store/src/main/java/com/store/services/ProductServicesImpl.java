@@ -50,8 +50,8 @@ public class ProductServicesImpl implements ProductServices{
 				throw new ProductException("Product already exist ");
 			}else {
 				cat.getProductList().add(product);
-				categoryRepo.save(cat);
-				return product;
+				product.setCategory(cat);
+				return productRepo.save(product);
 			}
 		}
 	}

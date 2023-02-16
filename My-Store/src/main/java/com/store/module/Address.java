@@ -1,9 +1,13 @@
 package com.store.module;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -23,7 +27,7 @@ import lombok.ToString;
 @Entity
 public class Address {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer addressId;
 	@Size(min = 2, max = 5, message = "Entered street number is invalid")
 	private String streetNo;
@@ -38,8 +42,8 @@ public class Address {
 	@Pattern(regexp = "^[1-9]{6}", message = "Entered pin code is invalid ")
 	private String pincode;
 	
-	@ManyToOne
-//	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "customerId")
 	@JsonIgnore
 	private Customer customer;
 	

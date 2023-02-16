@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class Category {
 	@Size(min = 2, max = 20, message = "Length of category should not be more than 20 characters and less than 2 characters")
 	private String categoryName;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+	@OneToMany(cascade = CascadeType.ALL,mappedBy = "category",fetch = FetchType.EAGER)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private List<Product> productList = new ArrayList<>();
 }

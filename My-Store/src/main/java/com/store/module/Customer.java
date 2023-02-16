@@ -1,10 +1,12 @@
 package com.store.module;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +16,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -46,13 +49,14 @@ public class Customer {
 	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	private String customerPassword;
 	
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<Address> addresses;
+	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private List<Address> addresses=new ArrayList<>();
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart;
 	
-	@OneToMany(cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private List<Orders> orders;
 }
