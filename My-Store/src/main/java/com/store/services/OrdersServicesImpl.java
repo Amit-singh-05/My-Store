@@ -45,7 +45,7 @@ public class OrdersServicesImpl implements OrdersServices{
 	private OrdersRepo ordersRepo;
 	
 	@Override
-	public Orders PlaceOrder(Orders orders,Integer addressId,String key) throws ProductException, AddressException,CustomerException,OrdersException,LoginException {
+	public Orders placeOrder(Orders orders,Integer addressId,String key) throws ProductException, AddressException,CustomerException,OrdersException,LoginException {
 		Optional<Orders> opt = ordersRepo.findById(orders.getOrderId());
 		if(opt.isPresent()) {
 			throw new OrdersException("Order with this order ID already placed => "+orders.getOrderId());
@@ -61,7 +61,7 @@ public class OrdersServicesImpl implements OrdersServices{
 		}
 
 		if (loggedInUser.getAdmin()) {
-			throw new CustomerException("Only customer can access cart details please log in as customer ");
+			throw new CustomerException("Only customer can order products please log in as customer ");
 		}
 		
 		Optional<Customer> copt = customerrepo.findById(loggedInUser.getUserId());
@@ -95,6 +95,44 @@ public class OrdersServicesImpl implements OrdersServices{
 				cartRepo.save(cart);
 				return orders;	
 			}
+	}
+
+	@Override
+	public Orders cancelOrder(Integer orderId, String key)
+			throws ProductException, OrdersException, CustomerException, LoginException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (loggedInUser.getAdmin()) {
+			throw new CustomerException("Only customer can cancel the order please log in as customer ");
+		}
+		
+		Optional<Customer> copt = customerrepo.findById(loggedInUser.getUserId());
+		if(copt.isEmpty()) {
+			throw new CustomerException("No customer data found with this ID ");
+		}
+			Customer customer = copt.get();
+		
+		Optional<Orders> oopt = ordersRepo.findById(orderId);
+		if(oopt.isEmpty()) {
+			throw new OrdersException("No Order found with this order ID => "+orderId);
+		}
+		
+		Orders orders = oopt.get();
+		
+		customer.getOrders().remove(orders);
+		customerrepo.save(customer);
+		for(Product i:orders.getProducts().keySet()) {
+			i.setQuantity(i.getQuantity()+orders.getProducts().get(i));
+			productRepo.save(i);
+		}
+		
+		ordersRepo.delete(orders);
+		
+		return orders;
 	}
 
 }

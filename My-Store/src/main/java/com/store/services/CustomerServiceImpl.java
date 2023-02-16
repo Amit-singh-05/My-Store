@@ -67,6 +67,7 @@ public class CustomerServiceImpl implements CustomerService{
 			Optional<Customer> opt = customerrepo.findById(loggedInUser.getUserId());
 			Customer ccustomer = opt.get();
 			ccustomer.getAddresses().add(address);
+			address.setCustomer(ccustomer);
 			customerrepo.save(ccustomer);
 			return ccustomer;
 		}else {

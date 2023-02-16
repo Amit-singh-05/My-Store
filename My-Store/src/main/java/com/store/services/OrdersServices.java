@@ -8,5 +8,6 @@ import com.store.exception.ProductException;
 import com.store.module.Orders;
 
 public interface OrdersServices {
-	public Orders PlaceOrder(Orders orders,Integer addressId,String key) throws ProductException,AddressException,OrdersException,CustomerException, LoginException;
+	public Orders placeOrder(Orders orders,Integer addressId,String key) throws ProductException,AddressException,OrdersException,CustomerException, LoginException;
+	public Orders cancelOrder(Integer orderId,String key) throws ProductException,OrdersException,CustomerException, LoginException;
 }
