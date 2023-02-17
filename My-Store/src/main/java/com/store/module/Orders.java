@@ -12,6 +12,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.validation.constraints.NotBlank;
@@ -38,8 +39,9 @@ public class Orders {
 	private Integer orderId;
 	
 	@ElementCollection
+	@JoinTable(name = "orderedProducts")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private Map<Product,Integer> products = new HashMap<>();
+	private Map<String,Integer> orderedProducts = new HashMap<>();
 	
 	@NotNull(message="Order status can't be null")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -55,6 +57,6 @@ public class Orders {
 	private Address deliveryAddress;
 	
     @ManyToOne
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private Customer customer;
 }

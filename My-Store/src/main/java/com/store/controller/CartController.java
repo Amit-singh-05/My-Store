@@ -36,15 +36,15 @@ public class CartController {
 
 	}
 	
-	@PutMapping("/updateProductQuantity")
-	public ResponseEntity<Cart> updateProductQuantityHandler(@RequestParam String productName, @RequestParam Integer quantity ,@RequestParam String key) throws ProductException, CustomerException, LoginException {
-
-		Cart updatedCart = cartServices.updateProductQuantity(productName, quantity, key);
-		
-		return new ResponseEntity<Cart>(updatedCart, HttpStatus.OK);
-
-	}
-	
+//	@PutMapping("/updateProductQuantity")
+//	public ResponseEntity<Cart> updateProductQuantityHandler(@RequestParam String productName, @RequestParam Integer quantity ,@RequestParam String key) throws ProductException, CustomerException, LoginException {
+//
+//		Cart updatedCart = cartServices.updateProductQuantity(productName, quantity, key);
+//		
+//		return new ResponseEntity<Cart>(updatedCart, HttpStatus.OK);
+//
+//	}
+//	
 	@DeleteMapping("/deleteProductFromCart")
 	public ResponseEntity<Cart> deleteProductFromCartHandler(@RequestParam("productName") String productName, @RequestParam String key) throws ProductException, CustomerException, LoginException{
 
@@ -54,11 +54,11 @@ public class CartController {
 	}
 	
 	@GetMapping("/getAllProductsInCart")
-	public ResponseEntity<Map<Product, Integer>> getAllProductsInCartHandler(@RequestParam String key) throws ProductException, CustomerException, LoginException{
+	public ResponseEntity<Map<String, Integer>> getAllProductsInCartHandler(@RequestParam String key) throws ProductException, CustomerException, LoginException{
 
-		Map<Product, Integer> products = cartServices.getAllProductsInCart(key);
+		Map<String, Integer> products = cartServices.getAllProductsInCart(key);
 
-		return new ResponseEntity<Map<Product, Integer>>(products, HttpStatus.OK);
+		return new ResponseEntity<Map<String, Integer>>(products, HttpStatus.OK);
 
 	}
 }

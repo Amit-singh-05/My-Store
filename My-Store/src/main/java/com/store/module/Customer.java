@@ -56,7 +56,7 @@ public class Customer {
 	@OneToOne(cascade = CascadeType.ALL)
 	private Cart cart;
 	
-	@OneToMany(mappedBy = "customer",cascade = CascadeType.ALL)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private List<Orders> orders;
+//	@OneToMany(mappedBy = "customer")
+//	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//	private List<Orders> orders=new ArrayList<>();
 }
