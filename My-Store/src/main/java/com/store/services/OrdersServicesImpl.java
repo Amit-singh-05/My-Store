@@ -70,7 +70,7 @@ public class OrdersServicesImpl implements OrdersServices{
 		}
 			Customer customer = copt.get();
 			Cart cart = customer.getCart();
-			Map<Product,Integer> products = cart.getProducts();
+			Map<String,Integer> products = cart.getProducts();
 			Address adr = new Address();
 			if(customer.getAddresses().contains(aopt.get())) {
 				adr = aopt.get();
@@ -81,21 +81,21 @@ public class OrdersServicesImpl implements OrdersServices{
 			if(products.isEmpty()) {
 				throw new ProductException("No product found ");
 			}else {
-				orders.setProducts(products);
+				orders.setOrderedProducts(products);
 				orders.setDeliveryDate(orders.getOrderDate().plusDays(7));
 				orders.setCustomer(customer);
 				orders.setDeliveryAddress(adr);
-				customer.getOrders().add(orders);
-				customerrepo.save(customer);
-				for(Product i:orders.getProducts().keySet()) {
-					i.setQuantity(i.getQuantity()-orders.getProducts().get(i));
-					productRepo.save(i);
+				for(String i:orders.getOrderedProducts().keySet()) {
+					Product p = productRepo.findByProductName(i);
+					p.setQuantity(p.getQuantity()-orders.getOrderedProducts().get(i));
+					productRepo.save(p);
 				}
 				cart.setProducts(null);
 				cartRepo.save(cart);
-				return orders;	
+				return ordersRepo.save(orders);	
 			}
 	}
+	
 
 	@Override
 	public Orders cancelOrder(Integer orderId, String key)
@@ -123,11 +123,10 @@ public class OrdersServicesImpl implements OrdersServices{
 		
 		Orders orders = oopt.get();
 		
-		customer.getOrders().remove(orders);
-		customerrepo.save(customer);
-		for(Product i:orders.getProducts().keySet()) {
-			i.setQuantity(i.getQuantity()+orders.getProducts().get(i));
-			productRepo.save(i);
+		for(String i:orders.getOrderedProducts().keySet()) {
+			Product p = productRepo.findByProductName(i);
+			p.setQuantity(p.getQuantity()+orders.getOrderedProducts().get(i));
+			productRepo.save(p);
 		}
 		
 		ordersRepo.delete(orders);
