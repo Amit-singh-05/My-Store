@@ -1,9 +1,12 @@
 package com.store.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,5 +45,23 @@ public class OrdersController {
 		Orders cancelledOrder  = ordersServices.cancelOrder(orderId, key);
 
 		return new ResponseEntity<Orders>(cancelledOrder, HttpStatus.OK);
+	}
+	
+	@GetMapping("/getAllOrders")
+	public ResponseEntity<List<Orders>> findAllOrdersHandler(@RequestParam String key) throws OrdersException, CustomerException, LoginException{
+
+		List<Orders> orders = ordersServices.getAllOrders(key);
+
+		return new ResponseEntity<List<Orders>>(orders, HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/getAllOrdersByCustomerID")
+	public ResponseEntity<List<Orders>> findAllOrdersByCustomerIDHandler(@RequestParam String key) throws OrdersException, CustomerException, LoginException{
+
+		List<Orders> orders = ordersServices.getAllOrdersByCustomer(key);
+
+		return new ResponseEntity<List<Orders>>(orders, HttpStatus.OK);
+
 	}
 }

@@ -1,5 +1,6 @@
 package com.store.services;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -132,6 +133,46 @@ public class OrdersServicesImpl implements OrdersServices{
 		ordersRepo.delete(orders);
 		
 		return orders;
+	}
+
+
+	@Override
+	public List<Orders> getAllOrders(String key) throws OrdersException, CustomerException, LoginException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (!loggedInUser.getAdmin()) {
+			throw new CustomerException("Only admin can access all order details by all customers ");
+		}
+		List<Orders> allorders = ordersRepo.findAll();
+		if(allorders.isEmpty()) {
+			throw new OrdersException("No order found ");
+		}else {
+			return allorders;
+		}
+	}
+
+
+	@Override
+	public List<Orders> getAllOrdersByCustomer(String key) throws OrdersException, CustomerException, LoginException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (loggedInUser.getAdmin()) {
+			throw new CustomerException("Log in as customer to get all order details ");
+		}
+		List<Orders> allorders = ordersRepo.findBycustomerId(loggedInUser.getUserId());
+		if(allorders.isEmpty()) {
+			throw new OrdersException("No order found ");
+		}else {
+			return allorders;
+		}
 	}
 
 }
