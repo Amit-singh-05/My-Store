@@ -43,5 +43,5 @@ My Store is a spring boot application developed to work as a online shopping app
 - Git & GitHub
 - Spring tool suite
 
-
+# Entity Relationship Diagram (ERD)
 ![123](https://user-images.githubusercontent.com/103619788/219714882-03e5f097-63a4-4ab8-9d8b-ce2842e6eff2.jpg)
