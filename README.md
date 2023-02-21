@@ -31,6 +31,16 @@ My Store is a spring boot application developed to work as a online shopping app
 
 ![01](https://user-images.githubusercontent.com/103619788/220114469-601fbb07-598b-44ed-865d-d1becb749b9c.jpg)
 
+### Category Features 
+
+- Add Category Handler (http://localhost:8088/categoryController/addCategory?key={KEY})
+- Find Category By Category Name Handler (http://localhost:8088/categoryController/categoryByCategoryName?categoryName={categoryName})
+- Find All Categorys Handler(http://localhost:8088/categoryController/categorys)
+- Update Category Details Handler(http://localhost:8088/categoryController/updateCategory?key={KEY})
+- Delete Category Handler(http://localhost:8088/categoryController/deleteCategory?categoryName={categoryName}&key={KEY})
+
+![03](https://user-images.githubusercontent.com/103619788/220283745-11c5ca3a-1398-469b-be67-07a713ef6d97.jpg)
+
 # Technology and Tools used 
 
 - Java
