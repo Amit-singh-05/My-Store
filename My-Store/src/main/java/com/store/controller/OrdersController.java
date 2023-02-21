@@ -2,6 +2,8 @@ package com.store.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.store.enums.OrderStatus;
 import com.store.exception.AddressException;
 import com.store.exception.AdminException;
 import com.store.exception.CategoryException;
@@ -62,6 +65,24 @@ public class OrdersController {
 		List<Orders> orders = ordersServices.getAllOrdersByCustomer(key);
 
 		return new ResponseEntity<List<Orders>>(orders, HttpStatus.OK);
+
+	}
+	
+	@PutMapping("/UpdateDeliveryAddress")
+	public ResponseEntity<Orders> UpdateDeliveryAddressHandler(@RequestParam Integer orderId,@RequestParam Integer addressId, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
+
+		Orders order = ordersServices.UpdateDeliveryAddress(orderId, addressId, key);
+		
+		return new ResponseEntity<Orders>(order, HttpStatus.OK);
+
+	}
+	
+	@PutMapping("/UpdateDeliveryStatus")
+	public ResponseEntity<Orders> UpdateDeliveryStatusHandler(@RequestParam Integer orderId,@RequestParam String status, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
+
+		Orders order = ordersServices.UpdateDeliveryStatus(orderId, status, key);
+		
+		return new ResponseEntity<Orders>(order, HttpStatus.OK);
 
 	}
 }

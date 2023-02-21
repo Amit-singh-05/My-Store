@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.store.dto.CurrentUserSession;
+import com.store.enums.OrderStatus;
 import com.store.exception.AddressException;
 import com.store.exception.CustomerException;
 import com.store.exception.LoginException;
@@ -173,6 +174,87 @@ public class OrdersServicesImpl implements OrdersServices{
 		}else {
 			return allorders;
 		}
+	}
+
+
+	@Override
+	public Orders UpdateDeliveryAddress(Integer orderId, Integer addressId, String key)
+			throws OrdersException, CustomerException, LoginException, AddressException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (loggedInUser.getAdmin()) {
+			throw new CustomerException("Log in as customer to update delivery address ");
+		}
+		Optional<Address> aopt = addressRepo.findById(addressId);
+		if(aopt.isEmpty()) {
+			throw new AddressException("No address found with this address ID => "+addressId);
+		}
+		List<Orders> allorders = ordersRepo.findBycustomerId(loggedInUser.getUserId());
+		if(allorders.isEmpty()) {
+			throw new OrdersException("No order found ");
+		}else {
+			Optional<Orders> oopt  = ordersRepo.findById(orderId);
+			if(oopt.isEmpty()) {
+				throw new OrdersException("No order found with this order id");
+			}else {
+				Orders order = oopt.get();
+				if(allorders.contains(order)) {
+					Optional<Customer> copt = customerrepo.findById(order.getCustomer().getCustomerId());
+					if(copt.isEmpty()) {
+						throw new CustomerException("No customer data found with this ID ");
+					}
+					Customer customer = copt.get();
+					Address adr = new Address();
+					if(customer.getAddresses().contains(aopt.get())) {
+						adr = aopt.get();
+					}else {
+						throw new AddressException("You don't have any address with this address ID  => "+addressId);
+					}
+					order.setDeliveryAddress(adr);
+					ordersRepo.save(order);
+					return order;
+				}else {
+					throw new OrdersException("No order found with this order id");
+				}
+			}
+		}
+	}
+
+
+	@Override
+	public Orders UpdateDeliveryStatus(Integer orderId, String status, String key)
+			throws OrdersException, CustomerException, LoginException, AddressException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (!loggedInUser.getAdmin()) {
+			throw new CustomerException("Log in as admin to update delivery status ");
+		}
+		OrderStatus orderStatus = null ;
+
+		try {
+			orderStatus = OrderStatus.valueOf(status);
+		} catch (Exception e) {
+			throw new OrdersException("Order status can only be NotShipped or Shipped or Delivered");
+		}
+		Optional<Orders> oopt  = ordersRepo.findById(orderId);
+		if(oopt.isEmpty()) {
+			throw new OrdersException("No order found with this order id");
+		}else {
+			Orders order = oopt.get();
+			order.setOrderStatus(orderStatus.getOrderStatus());
+			ordersRepo.save(order);
+			return order;
+		}
+		
+		
 	}
 
 }

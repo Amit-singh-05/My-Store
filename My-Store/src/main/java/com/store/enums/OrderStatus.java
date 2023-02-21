@@ -1,13 +1,13 @@
 package com.store.enums;
 
 public enum OrderStatus {
-	Delivered("Delivered",3),
-    Shipped("Shipment has been released for the destination ",2),
-    NotShipped("Shipment is pending",1);
+	Delivered("Delivered"),
+    Shipped("Shipment has been released for the destination "),
+    NotShipped("Shipment is pending");
 
     private String orderStatus;
 
-    private OrderStatus(String orderStatus, int i) {
+    private OrderStatus(String orderStatus) {
 		this.orderStatus = orderStatus;
 	}
 
