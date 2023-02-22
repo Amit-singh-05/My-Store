@@ -16,7 +16,7 @@ My Store is a spring boot application developed to work as a online shopping app
 - Cart Module
 - Orders Module
 
-# Features 
+# Features (http://localhost:8088/swagger-ui/#/)
 
 ### Admin Features 
 
@@ -66,6 +66,15 @@ My Store is a spring boot application developed to work as a online shopping app
 - Delete Customer Handler (http://localhost:8088/customerController/deleteCustomer?key={key})
 
 ![02](https://user-images.githubusercontent.com/103619788/220293152-c4b2f41b-6318-403d-a5a1-edae4e490484.jpg)
+
+### Cart Features 
+
+- Add Product To Cart Handler (http://localhost:8088/cartController/addProductToCart?productName={productName}&quantity={quantity}&key={key})
+- Update Product Quantity Handler (http://localhost:8088/cartController/updateProductQuantity?productName={productName}&quantity={quantity}&key={key})
+- Find All Products In Cart Handler(http://localhost:8088/cartController/getAllProductsInCart?key={key})
+- Remove Product From Cart Handler(http://localhost:8088/cartController/deleteProductFromCart?productName={productName}&key={key})
+
+![05](https://user-images.githubusercontent.com/103619788/220562669-8090633a-d06e-4a7a-9d6b-c626ee58c1ba.jpg)
 
 # Technology and Tools used 
 
