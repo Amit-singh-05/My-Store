@@ -1,8 +1,7 @@
 package com.store.services;
 
 import java.util.List;
-
-import com.store.enums.OrderStatus;
+import java.time.LocalDate;
 import com.store.exception.AddressException;
 import com.store.exception.CustomerException;
 import com.store.exception.LoginException;
@@ -17,4 +16,5 @@ public interface OrdersServices {
 	public List<Orders> getAllOrdersByCustomer(String key) throws OrdersException,CustomerException, LoginException;
 	public Orders UpdateDeliveryAddress(Integer orderId,Integer addressId,String key) throws OrdersException,CustomerException, LoginException,AddressException;
 	public Orders UpdateDeliveryStatus(Integer orderId,String status,String key) throws OrdersException,CustomerException, LoginException,AddressException;
+	public Orders UpdateDeliveryDate(LocalDate date, Integer orderId,String key) throws OrdersException,CustomerException, LoginException,AddressException;
 }

@@ -1,5 +1,6 @@
 package com.store.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -81,6 +82,15 @@ public class OrdersController {
 	public ResponseEntity<Orders> UpdateDeliveryStatusHandler(@RequestParam Integer orderId,@RequestParam String status, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
 
 		Orders order = ordersServices.UpdateDeliveryStatus(orderId, status, key);
+		
+		return new ResponseEntity<Orders>(order, HttpStatus.OK);
+
+	}
+	
+	@PutMapping("/UpdateDeliveryDate")
+	public ResponseEntity<Orders> UpdateDeliveryDateHandler(@RequestParam("date") String date, @RequestParam Integer orderId, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
+
+		Orders order = ordersServices.UpdateDeliveryDate(LocalDate.parse(date), orderId, key);
 		
 		return new ResponseEntity<Orders>(order, HttpStatus.OK);
 

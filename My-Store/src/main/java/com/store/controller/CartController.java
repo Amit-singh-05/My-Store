@@ -36,15 +36,15 @@ public class CartController {
 
 	}
 	
-//	@PutMapping("/updateProductQuantity")
-//	public ResponseEntity<Cart> updateProductQuantityHandler(@RequestParam String productName, @RequestParam Integer quantity ,@RequestParam String key) throws ProductException, CustomerException, LoginException {
-//
-//		Cart updatedCart = cartServices.updateProductQuantity(productName, quantity, key);
-//		
-//		return new ResponseEntity<Cart>(updatedCart, HttpStatus.OK);
-//
-//	}
-//	
+	@PutMapping("/updateProductQuantity")
+	public ResponseEntity<Cart> updateProductQuantityHandler(@RequestParam String productName, @RequestParam Integer quantity ,@RequestParam String key) throws ProductException, CustomerException, LoginException {
+
+		Cart updatedCart = cartServices.updateProductQuantity(productName, quantity, key);
+		
+		return new ResponseEntity<Cart>(updatedCart, HttpStatus.OK);
+
+	}
+	
 	@DeleteMapping("/deleteProductFromCart")
 	public ResponseEntity<Cart> deleteProductFromCartHandler(@RequestParam("productName") String productName, @RequestParam String key) throws ProductException, CustomerException, LoginException{
 

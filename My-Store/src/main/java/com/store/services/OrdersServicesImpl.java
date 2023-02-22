@@ -1,5 +1,6 @@
 package com.store.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -255,6 +256,40 @@ public class OrdersServicesImpl implements OrdersServices{
 		}
 		
 		
+	}
+
+
+	@Override
+	public Orders UpdateDeliveryDate(LocalDate date, Integer orderId, String key)
+			throws OrdersException, CustomerException, LoginException, AddressException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (loggedInUser.getAdmin()) {
+			throw new CustomerException("Log in as customer to update delivery date ");
+		}
+		Customer customer = customerrepo.findById(loggedInUser.getUserId()).get();
+		
+		Optional<Orders> oopt = ordersRepo.findById(orderId);
+		if(oopt.isEmpty()) {
+			throw new OrdersException("No order found with this order ID ");
+		}else {
+			Orders order = oopt.get();
+			List <Orders> orders = ordersRepo.findBycustomerId(customer.getCustomerId());
+			if(orders.contains(order)) {
+				if(date.isAfter(order.getDeliveryDate())) {
+					order.setDeliveryDate(date);
+					return ordersRepo.save(order);
+				}else {
+					throw new OrdersException("Order can't be delivered before "+order.getDeliveryDate());
+				}
+			}else {
+				throw new OrdersException("Loged-in customer does not have any order with this order ID ");
+			}
+		}
 	}
 
 }
