@@ -70,7 +70,7 @@ public class OrdersController {
 	}
 	
 	@PutMapping("/UpdateDeliveryAddress")
-	public ResponseEntity<Orders> UpdateDeliveryAddressHandler(@RequestParam Integer orderId,@RequestParam Integer addressId, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
+	public ResponseEntity<Orders> updateDeliveryAddressHandler(@RequestParam Integer orderId,@RequestParam Integer addressId, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
 
 		Orders order = ordersServices.UpdateDeliveryAddress(orderId, addressId, key);
 		
@@ -79,7 +79,7 @@ public class OrdersController {
 	}
 	
 	@PutMapping("/UpdateDeliveryStatus")
-	public ResponseEntity<Orders> UpdateDeliveryStatusHandler(@RequestParam Integer orderId,@RequestParam String status, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
+	public ResponseEntity<Orders> updateDeliveryStatusHandler(@RequestParam Integer orderId,@RequestParam String status, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
 
 		Orders order = ordersServices.UpdateDeliveryStatus(orderId, status, key);
 		
@@ -88,11 +88,20 @@ public class OrdersController {
 	}
 	
 	@PutMapping("/UpdateDeliveryDate")
-	public ResponseEntity<Orders> UpdateDeliveryDateHandler(@RequestParam("date") String date, @RequestParam Integer orderId, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
+	public ResponseEntity<Orders> updateDeliveryDateHandler(@RequestParam("date") String date, @RequestParam Integer orderId, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
 
 		Orders order = ordersServices.UpdateDeliveryDate(LocalDate.parse(date), orderId, key);
 		
 		return new ResponseEntity<Orders>(order, HttpStatus.OK);
+
+	}
+	
+	@PutMapping("/UpdateDeliveryStatusByOrderdate")
+	public ResponseEntity<List<Orders>> updateDeliveryStatusByOrderdateHandler(@RequestParam("date") String date,@RequestParam String status, @RequestParam("key") String key) throws OrdersException, CustomerException, LoginException, AddressException{
+
+		List<Orders> orders = ordersServices.UpdateDeliveryStatusByOrderdate(LocalDate.parse(date), status, key);
+		
+		return new ResponseEntity<List<Orders>>(orders, HttpStatus.OK);
 
 	}
 }
