@@ -77,6 +77,19 @@ My Store is a spring boot application developed to work as a online shopping app
 
 ![05](https://user-images.githubusercontent.com/103619788/220913053-7a8f920d-e450-487e-9083-8a72692189d7.jpg)
 
+### Orders Features 
+
+- Place Order Handler (http://localhost:8088/ordersController/placeOrder?addressId={addressId}&key={key})
+- Cancel Order Handler (http://localhost:8088/ordersController/cancelOrder?orderId={orderId}&key={key})
+- Find All Orders Handler (http://localhost:8088/ordersController/getAllOrders?key={key})
+- Find All Orders of Customer Handler (http://localhost:8088/ordersController/getAllOrdersByCustomerID?key={key})
+- Update Delivery Address Handler (http://localhost:8088/ordersController/UpdateDeliveryAddress?orderId={orderId}&addressId={addressId}&key={key})
+- Update Delivery Status Handler (http://localhost:8088/ordersController/UpdateDeliveryStatus?orderId={orderId}&status={deliveryStatus}&key={key})
+- Update Delivery Date Handler (http://localhost:8088/ordersController/UpdateDeliveryDate?date={deliveryDate}&orderId={orderId}&key={key})
+- Update Delivery Status By Order Date Handler (http://localhost:8088/ordersController/UpdateDeliveryStatusByOrderdate?date={orderDate}&status={deliveryStatus}&key={key})
+
+![07](https://user-images.githubusercontent.com/103619788/220931909-e9c2ca49-5532-45d3-8879-71540e1dfe6b.jpg)
+
 # Technology and Tools used 
 
 - Java
