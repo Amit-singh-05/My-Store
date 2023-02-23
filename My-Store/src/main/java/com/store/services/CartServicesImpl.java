@@ -1,5 +1,6 @@
 package com.store.services;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -176,6 +177,31 @@ public class CartServicesImpl implements CartServices{
 			}else {
 				return products;	
 			}
+	}
+
+	@Override
+	public Cart removeAllProductsFromCart(String key) throws ProductException, CustomerException, LoginException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (loggedInUser.getAdmin()) {
+			throw new CustomerException("Only customer can delete product from their cart please log in as customer ");
+		}
+		
+		Optional<Customer> copt = customerrepo.findById(loggedInUser.getUserId());
+		if(copt.isEmpty()) {
+			throw new CustomerException("No customer data found with this ID ");
+		}
+			Customer customer = copt.get();
+			Cart cart = customer.getCart();
+//			Map<String,Integer> products = cart.getProducts();
+			cart.setProducts(new HashMap<>());
+			
+			cartRepo.save(cart);
+            return cart;
 	}
 
 }

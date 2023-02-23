@@ -254,8 +254,6 @@ public class OrdersServicesImpl implements OrdersServices{
 			ordersRepo.save(order);
 			return order;
 		}
-		
-		
 	}
 
 
@@ -289,6 +287,38 @@ public class OrdersServicesImpl implements OrdersServices{
 			}else {
 				throw new OrdersException("Loged-in customer does not have any order with this order ID ");
 			}
+		}
+	}
+
+
+	@Override
+	public List<Orders> UpdateDeliveryStatusByOrderdate(LocalDate date, String status, String key)
+			throws OrdersException, CustomerException, LoginException, AddressException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (!loggedInUser.getAdmin()) {
+			throw new CustomerException("Log in as admin to update delivery status ");
+		}
+		OrderStatus orderStatus = null ;
+
+		try {
+			orderStatus = OrderStatus.valueOf(status);
+		} catch (Exception e) {
+			throw new OrdersException("Order status can only be NotShipped or Shipped or Delivered");
+		}
+		List<Orders> oopt  = ordersRepo.findByOrderDate(date);
+		if(oopt.isEmpty()) {
+			throw new OrdersException("No order found for this order date => "+date);
+		}else {
+			for(Orders i:oopt) {
+				i.setOrderStatus(orderStatus.getOrderStatus());
+				ordersRepo.save(i);
+			}
+			return oopt;
 		}
 	}
 

@@ -61,4 +61,13 @@ public class CartController {
 		return new ResponseEntity<Map<String, Integer>>(products, HttpStatus.OK);
 
 	}
+	
+	@PutMapping("/removeAllProductsFromCart")
+	public ResponseEntity<Cart> removeAllProductsFromCart(@RequestParam String key) throws ProductException, CustomerException, LoginException {
+
+		Cart updatedCart = cartServices.removeAllProductsFromCart(key);
+		
+		return new ResponseEntity<Cart>(updatedCart, HttpStatus.OK);
+
+	}
 }
