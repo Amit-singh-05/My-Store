@@ -71,10 +71,11 @@ My Store is a spring boot application developed to work as a online shopping app
 
 - Add Product To Cart Handler (http://localhost:8088/cartController/addProductToCart?productName={productName}&quantity={quantity}&key={key})
 - Update Product Quantity Handler (http://localhost:8088/cartController/updateProductQuantity?productName={productName}&quantity={quantity}&key={key})
-- Find All Products In Cart Handler(http://localhost:8088/cartController/getAllProductsInCart?key={key})
-- Remove Product From Cart Handler(http://localhost:8088/cartController/deleteProductFromCart?productName={productName}&key={key})
+- Find All Products In Cart Handler (http://localhost:8088/cartController/getAllProductsInCart?key={key})
+- Remove Product From Cart Handler (http://localhost:8088/cartController/deleteProductFromCart?productName={productName}&key={key})
+- Remove All Products From Cart Handler (http://localhost:8088/cartController/removeAllProductsFromCart?key={key})
 
-![05](https://user-images.githubusercontent.com/103619788/220562669-8090633a-d06e-4a7a-9d6b-c626ee58c1ba.jpg)
+![05](https://user-images.githubusercontent.com/103619788/220913053-7a8f920d-e450-487e-9083-8a72692189d7.jpg)
 
 # Technology and Tools used 
 
