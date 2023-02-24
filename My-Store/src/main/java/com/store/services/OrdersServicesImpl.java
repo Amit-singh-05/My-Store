@@ -322,4 +322,36 @@ public class OrdersServicesImpl implements OrdersServices{
 		}
 	}
 
+
+	@Override
+	public List<Orders> cancelOrdersByOrderDate(LocalDate date, String key)
+			throws ProductException, OrdersException, CustomerException, LoginException {
+		CurrentUserSession loggedInUser = currentUserSessionRepo.findByUniqueID(key);
+
+		if (loggedInUser == null) {
+			throw new LoginException("Entered current user session key is invalid ");
+		}
+
+		if (!loggedInUser.getAdmin()) {
+			throw new CustomerException("Only admin can cancel the all the orders Placed on particular date  ");
+		}
+		
+		List<Orders> orders = ordersRepo.findByOrderDate(date);
+		if(orders.isEmpty()) {
+			throw new OrdersException("No Order found with on this date => "+date);
+		}
+		
+		for(Orders j:orders) {
+		
+		for(String i:j.getOrderedProducts().keySet()) {
+			Product p = productRepo.findByProductName(i);
+			p.setQuantity(p.getQuantity()+j.getOrderedProducts().get(i));
+			productRepo.save(p);
+		}
+		
+		ordersRepo.delete(j);
+		}
+		return orders;
+	}
+
 }

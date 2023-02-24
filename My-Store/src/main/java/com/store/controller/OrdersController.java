@@ -104,4 +104,12 @@ public class OrdersController {
 		return new ResponseEntity<List<Orders>>(orders, HttpStatus.OK);
 
 	}
+	
+	@DeleteMapping("/cancelOrdersByOrderDate")
+	public ResponseEntity<List<Orders>> cancelOrdersByOrderDateHandler(@RequestParam("date") String date,@RequestParam String key) throws ProductException, OrdersException, CustomerException, LoginException{
+
+		List<Orders> cancelledOrders  = ordersServices.cancelOrdersByOrderDate(LocalDate.parse(date), key);
+
+		return new ResponseEntity<List<Orders>>(cancelledOrders, HttpStatus.OK);
+	}
 }
