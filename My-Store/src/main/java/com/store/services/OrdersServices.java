@@ -18,4 +18,5 @@ public interface OrdersServices {
 	public Orders UpdateDeliveryStatus(Integer orderId,String status,String key) throws OrdersException,CustomerException, LoginException,AddressException;
 	public Orders UpdateDeliveryDate(LocalDate date, Integer orderId,String key) throws OrdersException,CustomerException, LoginException,AddressException;
 	public List<Orders> UpdateDeliveryStatusByOrderdate(LocalDate date,String status,String key) throws OrdersException,CustomerException, LoginException,AddressException;
+	public List<Orders> cancelOrdersByOrderDate(LocalDate date,String key) throws ProductException,OrdersException,CustomerException, LoginException;
 }
