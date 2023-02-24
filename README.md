@@ -87,8 +87,9 @@ My Store is a spring boot application developed to work as a online shopping app
 - Update Delivery Status Handler (http://localhost:8088/ordersController/UpdateDeliveryStatus?orderId={orderId}&status={deliveryStatus}&key={key})
 - Update Delivery Date Handler (http://localhost:8088/ordersController/UpdateDeliveryDate?date={deliveryDate}&orderId={orderId}&key={key})
 - Update Delivery Status By Order Date Handler (http://localhost:8088/ordersController/UpdateDeliveryStatusByOrderdate?date={orderDate}&status={deliveryStatus}&key={key})
+- Cancel Orders By Order Date Handler (http://localhost:8088/ordersController/cancelOrdersByOrderDate?date={orderDate}&key={key})
 
-![07](https://user-images.githubusercontent.com/103619788/220931909-e9c2ca49-5532-45d3-8879-71540e1dfe6b.jpg)
+![07](https://user-images.githubusercontent.com/103619788/221241114-fcd8303b-8cab-4312-852f-33f00bc2a318.jpg)
 
 # Technology and Tools used 
 
